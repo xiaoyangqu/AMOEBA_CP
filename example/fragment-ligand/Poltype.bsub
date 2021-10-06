@@ -1,0 +1,34 @@
+#!/bin/bash
+
+#BSUB -q dpool1
+#BSUB -J poltype
+#BSUB -o %J.out
+#BSUB -e %J.err
+#BSUB -n 14
+#BSUB -R "span[ptile=14]"
+
+echo job runs at the following node:
+echo $LSB_HOSTS 
+NP=$(echo $LSB_HOSTS | awk '{print NF}')
+echo ""
+echo Number of processor: $NP
+echo ""
+
+#add modulefiles
+module load openmpi/4.0.1
+module add g09/E01 
+##################################################################
+#export PATH="/data/home/qxy/miniconda3/bin:$PATH"
+#conda init
+#conda activate poltype
+
+export GAUSS_SCRDIR=/data/home/qxy/scratch
+export PSI_SCRATCH=/data/home/qxy/scratch
+#GDMA
+export GDMADIR=/data/home/qxy/gdma/bin/
+export PATH=/data/home/qxy/gdma/bin/:$PATH
+#tinkerrelease
+export PATH=/data/home/qxy/tinker/bin/:$PATH
+################################################################
+#EXECUTE
+python /data/home/qxy/poltype/PoltypeModules/poltype.py
